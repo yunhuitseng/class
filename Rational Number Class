@@ -1,0 +1,101 @@
+#include<iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+using std::ostream;
+class Rational
+{
+	friend ostream& operator<<(ostream&, const Rational&);
+public:
+	Rational(int ,int);
+	~Rational();
+	int numerator;
+	int denominator;
+	Rational operator+( const Rational&)const;
+	Rational operator-( const Rational&)const;
+	Rational operator*(const Rational&)const;
+	Rational operator/(const Rational&)const;
+	
+private:
+	int  GCD(const Rational&)const;
+	
+};
+
+Rational::Rational(int a=0 ,int b=1 )
+{
+	if (b<= 0) {
+		cout << "it is not exist" << endl;
+	}
+	numerator=a;
+	denominator=b;
+
+	
+}
+
+Rational::~Rational()
+{
+}
+
+ostream& operator<<(ostream& output, const Rational&num) {
+	if (num.denominator <= 0){
+		cout << "it is not exist" << endl;
+	}
+	else{
+		output << num.numerator<<"/" << num.denominator;
+	}
+	return output;
+}
+Rational Rational::operator+( const Rational&b)const {
+	Rational addresult(0,1);
+	addresult.numerator = numerator * b.denominator + b.numerator*denominator;
+	addresult.denominator = denominator * b.denominator;
+	//cout << addresult.numerator << "/" << addresult.denominator;
+	return addresult;
+}
+Rational Rational::operator-( const Rational&b)const {
+	Rational subresult(0, 1);
+	subresult.numerator = numerator * b.denominator - b.numerator*denominator;
+	subresult.denominator = denominator * b.denominator;
+	//cout << subresult.numerator << "/" << subresult.denominator;
+	return subresult;
+}
+Rational Rational::operator*(const Rational&b)const {
+	Rational mulresult(0, 1);
+	mulresult.numerator = numerator *b.numerator;
+	mulresult.denominator = denominator * b.denominator;
+	//cout << mulresult.numerator << "/" << mulresult.denominator;
+	return mulresult;
+}
+Rational Rational::operator/(const Rational&b)const {
+	Rational deresult(0, 1);
+	int gcd = 0;
+	deresult.numerator = (numerator * b.denominator);
+	deresult.denominator = (denominator * b.numerator);
+	gcd= GCD(deresult) ;
+	deresult.numerator /= gcd;
+	deresult.denominator /= gcd;
+	//cout << deresult.numerator << "/" << deresult.denominator;
+	return deresult;
+}
+int  Rational::GCD(const Rational &b) const{
+	
+	Rational temp;
+	if (b.numerator%b.denominator==0) {
+		return b.denominator;
+	}
+	else {
+		temp.numerator = b.denominator;
+		temp.denominator = b.numerator%b.denominator;
+		return GCD(temp);
+	}
+}
+int main() {
+	Rational a(1, 2);
+	Rational b(1, 3);
+	Rational c = a + b;
+	Rational d = a - b;
+	Rational e = c * a;
+	Rational f = c / b;
+	cout << c << ' ' << d << ' ' << e << ' '<< f << endl;
+	return 0;
+}
